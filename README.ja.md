@@ -22,6 +22,10 @@
 </p>
 
 <p align="center">
+  <sub>このフォークでは UI と設定を日本語化しています。macOS の言語が日本語なら自動で日本語になり、<strong>設定 → 一般 → 言語</strong> からも選べます。</sub>
+</p>
+
+<p align="center">
   <img src="docs/videos/agent-hud-loop.webp" alt="MacBook のノッチで動く Agent HUD のツアー。グローが赤・黄・緑のクォータ区間で呼吸する。ホバーするとパネルが開き、Claude と Codex のクォータ、DeepSeek の残高、直近 24 時間のトークンとセッションが並ぶ。クリックすると Claude のクォータが消費ペース表示に変わる。Claude がテスト実行を求めてきて「今回のみ許可」で応答すると、返信は「新着の返信」リマインダーとして届き、カードの「セッションに戻る」で戻れる" width="800">
 </p>
 
