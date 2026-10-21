@@ -78,6 +78,7 @@ public struct DesktopLaunchOptions: Equatable {
     private static func language(from value: String) -> AppLanguage? {
         switch value.lowercased() {
         case "zh", "zh-hans", "cn": return .zhHans
+        case "ja", "ja-jp", "jp": return .ja
         case "en": return .en
         case "system": return .system
         default: return nil

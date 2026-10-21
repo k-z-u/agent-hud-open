@@ -67,8 +67,7 @@ enum TencentBuddySessions {
             sessions[key].map { var item = $0
                 if let title = named[key]?.min(by: { $0.key < $1.key })?.value { item.title = title }
                 item.events = (events[key] ?? [:]).values.sorted { ($0.timestamp, $0.id) < ($1.timestamp, $1.id) }; return item }
-        }, notice: incomplete ? L10n.text("部分 \(source.vendor) 记录缺少时间或计数无法核对，未计入统计",
-                                          "Some \(source.vendor) records lack a time or have inconsistent counts and were excluded") : nil,
+        }, notice: incomplete ? L10n.text("部分 \(source.vendor) 记录缺少时间或计数无法核对，未计入统计", "Some \(source.vendor) records lack a time or have inconsistent counts and were excluded", "\(source.vendor) の一部の記録は時刻がないか件数が一致しないため、除外されました") : nil,
                           models: models, apiReached: reached, limitHits: hits)
     }
 
@@ -188,6 +187,6 @@ enum WorkBuddySessions: LocalSessionLayout {
         let name = ModelCatalog.consumerName(of: "\(AdditionalSource.workbuddy.rawValue)-model:\(model)")
         if apiReached.contains(model) { return name }
         let mark = name.count + 12 > 32 ? "WB" : "WorkBuddy"
-        return L10n.text("\(name)（\(mark)）", "\(name) (\(mark))")
+        return L10n.text("\(name)（\(mark)）", "\(name) (\(mark))", "\(name)（\(mark)）")
     }
 }

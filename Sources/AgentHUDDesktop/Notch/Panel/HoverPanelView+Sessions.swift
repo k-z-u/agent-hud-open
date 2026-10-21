@@ -43,7 +43,7 @@ extension HoverPanelView {
                 }
                 if rows.more > 0 {
                     Button { openSessions() } label: {
-                        Text(L10n.text("还有 \(rows.more) 个", "+\(rows.more) more"))
+                        Text(L10n.text("还有 \(rows.more) 个", "+\(rows.more) more", "ほか\(rows.more)件"))
                             .foregroundStyle(theme.secondary)
                     }
                 }
@@ -165,10 +165,9 @@ extension HoverPanelView {
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)
-        .help(L10n.text("有 \(asks.count) 个提问待回答，点击在此展开",
-                        "\(asks.count) questions waiting for an answer — click to answer here"))
+        .help(L10n.text("有 \(asks.count) 个提问待回答，点击在此展开", "\(asks.count) questions waiting for an answer — click to answer here", "\(asks.count)件の質問が回答待ちです。クリックするとここで回答できます"))
         .accessibilityLabel(L10n.text("待回答的提问：", "Questions waiting: ") + name)
-        .accessibilityValue(L10n.text("\(asks.count) 个", "\(asks.count)"))
+        .accessibilityValue(L10n.text("\(asks.count) 个", "\(asks.count)", "\(asks.count)件"))
         .accessibilityIdentifier("island-session-question-\(session.id)")
         .accessibilityAddTraits(expanded ? [.isSelected] : [])
     }
@@ -237,7 +236,7 @@ extension HoverPanelView {
     static func sessionStatus(_ rows: PanelSessionRows) -> String? {
         guard !rows.noneMatch else { return nil }
         return rows.running.isEmpty ? L10n.text("最近结束", "Recently ended")
-            : L10n.text("\(rows.running.count) 个运行中", "\(rows.running.count) running")
+            : L10n.text("\(rows.running.count) 个运行中", "\(rows.running.count) running", "\(rows.running.count)件実行中")
     }
 
     /// What the section says without rows: that the layout's filter keeps none of the sessions there are, or that there

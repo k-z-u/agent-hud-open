@@ -35,12 +35,12 @@ public enum QuotaForecast {
             guard beforeReset else { return projectedUsedAtReset.map(byReset) ?? L10n.text("记录不足", "Insufficient data") }
             // Keep the duration tied to the provider's latest estimate; don't simulate unobserved consumption.
             let exhaustion = Countdown.forecast(interval)
-            return L10n.text("耗尽 ~\(exhaustion)", "Exhausts ~\(exhaustion)")
+            return L10n.text("耗尽 ~\(exhaustion)", "Exhausts ~\(exhaustion)", "約 \(exhaustion) で枯渇")
         }
     }
 
     /// The share of the window used by its reset, in words.
     public static func byReset(_ projectedUsedPct: Double) -> String {
-        L10n.text("重置时 \(Int(projectedUsedPct.rounded()))%", "\(Int(projectedUsedPct.rounded()))% by reset")
+        L10n.text("重置时 \(Int(projectedUsedPct.rounded()))%", "\(Int(projectedUsedPct.rounded()))% by reset", "リセット時点で \(Int(projectedUsedPct.rounded()))%")
     }
 }

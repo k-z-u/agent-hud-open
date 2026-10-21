@@ -63,7 +63,7 @@ struct AgentPeek: Equatable {
     }
 
     private var runningText: String? {
-        running > 0 ? L10n.text("\(running) 个运行中", "\(running) running") : nil
+        running > 0 ? L10n.text("\(running) 个运行中", "\(running) running", "\(running)件実行中") : nil
     }
 
     /// What the one line says when the agent has no window to report.
@@ -113,7 +113,7 @@ struct AgentPeekView: View {
                 }.frame(height: peek.scaled(18))
             }
             if peek.running > 0 {
-                Text(L10n.text("\(peek.running) 个运行中", "\(peek.running) running"))
+                Text(L10n.text("\(peek.running) 个运行中", "\(peek.running) running", "\(peek.running)件実行中"))
                     .foregroundStyle(theme.secondary).frame(height: peek.scaled(18))
             }
         }
@@ -126,7 +126,7 @@ struct AgentPeekView: View {
     private var line: some View {
         HStack(spacing: peek.lineSpacing) {
             if peek.lines.isEmpty {
-                Text(peek.running > 0 ? L10n.text("\(peek.running) 个运行中", "\(peek.running) running") : peek.vendor)
+                Text(peek.running > 0 ? L10n.text("\(peek.running) 个运行中", "\(peek.running) running", "\(peek.running)件実行中") : peek.vendor)
                     .foregroundStyle(theme.secondary)
             }
             ForEach(peek.lines) { line in

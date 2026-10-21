@@ -369,22 +369,35 @@ struct SessionBarDetail: View {
 
     private var facts: [String] {
         if let call = bar.call {
-            return [call.model, call.subagent.map { L10n.text("子 agent \($0)", "Sub-agent \($0)") } ?? L10n.text("会话自己", "Session's own"),
+            return [call.model, call.subagent.map { L10n.text("子 agent \($0)", "Sub-agent \($0)", "サブエージェント \($0)") } ?? L10n.text("会话自己", "Session's own"),
                     call.gap.map { L10n.text("距上一次 ", "After ") + Countdown.format(max(0, $0)) }].compactMap { $0 }
         }
         return [axis == .turn ? Countdown.format(max(0, bar.end.timeIntervalSince(bar.start))) : nil,
-                bar.calls > 0 ? L10n.text("\(bar.calls) 次调用", bar.calls == 1 ? "1 call" : "\(bar.calls) calls") : nil,
+                bar.calls > 0 ? L10n.text("\(bar.calls) 次调用", bar.calls == 1 ? "1 call" : "\(bar.calls) calls", "\(bar.calls)回の呼び出し") : nil,
                 bar.compacted ? L10n.text("已压缩", "Compacted") : nil].compactMap { $0 }
     }
 
     private var notes: [String] {
         let names = { (tools: [String]) in tools.map(Self.toolName).joined(separator: L10n.text("、", ", ")) }
-        return [bar.call.flatMap { $0.received.isEmpty ? nil : L10n.text("读入 \(names($0.received)) 的结果", "Read in \(names($0.received)) results") },
-                bar.call.flatMap { $0.tools.isEmpty ? nil : L10n.text("发起 ", "Asked for ") + names($0.tools) },
-                bar.call == nil ? bar.subagents.map { L10n.text("子 agent 新增 ", "Sub-agents added ") + TokenFormat.short($0.new) } : nil,
-                bar.recached.map { L10n.text("缓存过期，重发 \(TokenFormat.short($0))", "Cache expired, \(TokenFormat.short($0)) sent again") },
-                bar.context.map { L10n.text("上下文 ", "Context ") + TokenFormat.short($0)
-                    + (bar.peakContext.map { L10n.text(" · 轮中最高 ", " · peak ") + TokenFormat.short($0) } ?? "") }].compactMap { $0 }
+        let readIn = bar.call.flatMap { call in
+            call.received.isEmpty ? nil : L10n.text("读入 \(names(call.received)) 的结果",
+                                                    "Read in \(names(call.received)) results",
+                                                    "結果 \(names(call.received)) 件を読み込みました")
+        }
+        let askedFor = bar.call.flatMap { call in
+            call.tools.isEmpty ? nil : L10n.text("发起 ", "Asked for ", "要求: ") + names(call.tools)
+        }
+        let added = bar.call == nil ? bar.subagents.map { L10n.text("子 agent 新增 ", "Sub-agents added ", "サブエージェント追加 ") + TokenFormat.short($0.new) } : nil
+        let recached = bar.recached.map { tokens in
+            L10n.text("缓存过期，重发 \(TokenFormat.short(tokens))",
+                      "Cache expired, \(TokenFormat.short(tokens)) sent again",
+                      "キャッシュの有効期限が切れたため、\(TokenFormat.short(tokens)) を再送しました")
+        }
+        let context = bar.context.map { tokens in
+            L10n.text("上下文 ", "Context ", "コンテキスト ") + TokenFormat.short(tokens)
+                + (bar.peakContext.map { L10n.text(" · 轮中最高 ", " · peak ", " · ピーク ") + TokenFormat.short($0) } ?? "")
+        }
+        return [readIn, askedFor, added, recached, context].compactMap { $0 }
     }
 
     /// An MCP tool by its own name, without its server's.

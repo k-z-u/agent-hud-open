@@ -45,17 +45,17 @@ public enum Countdown {
         let minutes = Int(min(ceil(interval / 60), Double(Int32.max)))
         let hours = minutes / 60
         if hours > 0 {
-            if minutes % 60 == 0 { return L10n.text("\(hours)小时", "\(hours)h") }
-            return L10n.text("\(hours)小时\(minutes % 60)分", "\(hours)h \(minutes % 60)m")
+            if minutes % 60 == 0 { return L10n.text("\(hours)小时", "\(hours)h", "\(hours)時間") }
+            return L10n.text("\(hours)小时\(minutes % 60)分", "\(hours)h \(minutes % 60)m", "\(hours)時間\(minutes % 60)分")
         }
-        return L10n.text("\(minutes)分", "\(minutes)m")
+        return L10n.text("\(minutes)分", "\(minutes)m", "\(minutes)分")
     }
 
     /// How long ago, in its largest unit: seconds, minutes, hours, then days: "5m 前" / "5m ago".
     public static func age(_ interval: TimeInterval) -> String {
         let seconds = max(0, Int(interval))
         let value = seconds < 60 ? "\(seconds)s" : seconds < 3600 ? "\(seconds / 60)m" : seconds < 86400 ? "\(seconds / 3600)h" : "\(seconds / 86400)d"
-        return L10n.text("\(value) 前", "\(value) ago")
+        return L10n.text("\(value) 前", "\(value) ago", "\(value) 前")
     }
 
     /// A wait, counted in seconds while that is still the honest unit, then as `compact`: "42s", "3m", "1h05m".
@@ -76,10 +76,10 @@ public enum Countdown {
     public static func sessionLabel(_ phase: SessionPhase, now: Date) -> String {
         if phase.isInFlight {
             let duration = format(now.timeIntervalSince(phase.since))
-            return L10n.text("\(duration) 进行中", "\(duration) running")
+            return L10n.text("\(duration) 进行中", "\(duration) running", "\(duration) 実行中")
         }
         let ago = formatRough(now.timeIntervalSince(phase.since))
-        return L10n.text("结束于 \(ago) 前", "ended \(ago) ago")
+        return L10n.text("结束于 \(ago) 前", "ended \(ago) ago", "\(ago) 前に終了")
     }
 
     /// The label of a session counted from its own start while its source has it in flight, else from its end.

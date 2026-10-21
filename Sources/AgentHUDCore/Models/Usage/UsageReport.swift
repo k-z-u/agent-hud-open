@@ -42,7 +42,7 @@ public struct IndexProgress: Hashable, Codable, Sendable {
         self.total = total
     }
 
-    public var label: String { L10n.text("索引中 \(done)/\(total)", "Indexing \(done)/\(total)") }
+    public var label: String { L10n.text("索引中 \(done)/\(total)", "Indexing \(done)/\(total)", "インデックス作成中 \(done)/\(total)") }
 }
 
 /// Everything one poll returns.

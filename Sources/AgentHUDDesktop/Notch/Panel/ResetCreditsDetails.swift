@@ -16,7 +16,7 @@ struct ResetCreditsDetails: View {
             HStack {
                 Text(L10n.text("额度重置", "Usage resets")).font(.ui(12, .semibold))
                 Spacer()
-                Text(L10n.text("\(resets.availableCount) 次可用", "\(resets.availableCount) available"))
+                Text(L10n.text("\(resets.availableCount) 次可用", "\(resets.availableCount) available", "\(resets.availableCount)回利用可能"))
                     .font(.tabular(11, .semibold)).foregroundStyle(theme.statusText(.ok))
             }
             Text(L10n.text("到期时间 · 本地时区", "Expires at · local time"))
@@ -24,7 +24,7 @@ struct ResetCreditsDetails: View {
             VStack(spacing: 8) {
                 ForEach(Array(resets.creditsByExpiry.enumerated()), id: \.element.id) { index, credit in
                     HStack {
-                        Text(L10n.text("重置 \(index + 1)", "Reset \(index + 1)"))
+                        Text(L10n.text("重置 \(index + 1)", "Reset \(index + 1)", "リセット \(index + 1)"))
                             .foregroundStyle(theme.secondary)
                         Spacer()
                         Text(Self.expiryLabel(credit)).font(.tabular(12))
@@ -55,13 +55,13 @@ struct ResetCreditsDetails: View {
     }
 
     static func missingLabel(_ count: Int) -> String {
-        L10n.text("\(count) 次重置的有效期未提供", "Expiry unavailable for \(count) resets")
+        L10n.text("\(count) 次重置的有效期未提供", "Expiry unavailable for \(count) resets", "\(count) 回のリセットの有効期限を取得できません")
     }
 
     static func accessibilityText(_ resets: CodexResetCredits) -> String {
-        var lines = [L10n.text("\(resets.availableCount) 次可用", "\(resets.availableCount) available")]
+        var lines = [L10n.text("\(resets.availableCount) 次可用", "\(resets.availableCount) available", "\(resets.availableCount)回利用可能")]
         lines += resets.creditsByExpiry.enumerated().map { index, credit in
-            L10n.text("重置 \(index + 1) · ", "Reset \(index + 1) · ") + expiryLabel(credit)
+            L10n.text("重置 \(index + 1) · ", "Reset \(index + 1) · ", "リセット \(index + 1) · ") + expiryLabel(credit)
         }
         let missing = resets.availableCount - (resets.credits?.count ?? 0)
         if missing > 0 { lines.append(missingLabel(missing)) }

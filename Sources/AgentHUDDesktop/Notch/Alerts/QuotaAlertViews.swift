@@ -195,7 +195,7 @@ private struct QuotaAlertCopy {
         guard let remaining = alert.snapshot.remainingPct else { return L10n.text("额度不可用", "Quota unavailable") }
         if alert.kind == .reset { return L10n.text("已重置", "Reset") }
         if remaining <= AlertPolicy.exhaustedRemaining { return L10n.text("已耗尽", "Empty") }
-        if alert.timeToExhaust != nil { return L10n.text("\(exhaustion) 后耗尽", "\(exhaustion) left") }
+        if alert.timeToExhaust != nil { return L10n.text("\(exhaustion) 后耗尽", "\(exhaustion) left", "残り \(exhaustion)") }
         return L10n.text("即将耗尽", "Running low")
     }
     var title: String {
@@ -215,7 +215,7 @@ private struct QuotaAlertCopy {
     }
     var otherLimits: String {
         let names = alert.otherExhaustedWindows.map(\.name).joined(separator: "、")
-        return L10n.text("\(names)额度仍已耗尽", "Still exhausted: \(names)")
+        return L10n.text("\(names)额度仍已耗尽", "Still exhausted: \(names)", "まだ枯渇中：\(names)")
     }
     var accessibilityLabel: String {
         alert.agent.displayName + " · " + compactTitle + (alert.isPreview ? L10n.text(" · 动画测试", " · Animation test") : "")

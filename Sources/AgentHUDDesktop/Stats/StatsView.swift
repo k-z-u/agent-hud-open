@@ -222,8 +222,8 @@ struct StatsView: View {
         let listed = counts.listed, running = counts.running
         return HStack(spacing: 6) {
             Circle().fill(running > 0 ? theme.status(.ok) : theme.tertiary).frame(width: 6, height: 6)
-            Text(activeOnly ? L10n.text("近 24 小时 \(listed) 个 · \(running) 个运行中", "\(listed) in 24 hours · \(running) running")
-                            : L10n.text("近 7 天 \(listed) 个 · \(running) 个运行中", "\(listed) in 7 days · \(running) running"))
+            Text(activeOnly ? L10n.text("近 24 小时 \(listed) 个 · \(running) 个运行中", "\(listed) in 24 hours · \(running) running", "24時間で\(listed)件 · \(running)件実行中")
+                            : L10n.text("近 7 天 \(listed) 个 · \(running) 个运行中", "\(listed) in 7 days · \(running) running", "7日間で\(listed)件 · \(running)件実行中"))
         }
         .font(.ui(11))
         .foregroundStyle(theme.secondary)

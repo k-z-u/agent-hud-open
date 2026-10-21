@@ -250,6 +250,6 @@ enum ProviderFailure {
     static var local: UsageProviderError { .init(L10n.text("部分本地会话无法读取，用量可能不完整", "Some local sessions could not be read; usage may be incomplete")) }
     static var limit: UsageProviderError { .init(L10n.text("会话超过本轮读取上限，用量尚不完整", "Session read limit reached; usage is incomplete")) }
     static func login(_ vendor: String) -> UsageProviderError {
-        .init(L10n.text("请先登录 \(vendor)，再刷新额度", "Sign in to \(vendor), then refresh quota"))
+        .init(L10n.text("请先登录 \(vendor)，再刷新额度", "Sign in to \(vendor), then refresh quota", "\(vendor) にサインインしてから、クォータを更新してください"))
     }
 }

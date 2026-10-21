@@ -366,7 +366,7 @@ struct AccountSectionHeader: View {
         guard let info = account.sourceInfo else { return nil }
         let date = account.observedAt.formatted(Date.FormatStyle().month(.abbreviated).day()
             .hour().minute().second().locale(L10n.dateLocale))
-        return info + "\n" + L10n.text("读取时间：\(date)", "Read at: \(date)")
+        return info + "\n" + L10n.text("读取时间：\(date)", "Read at: \(date)", "読み取り日時：\(date)")
     }
 }
 
@@ -425,7 +425,7 @@ struct CodexResetCreditsView: View {
     }
 
     private var availabilityLabel: String {
-        L10n.text("\(resets.availableCount) 次可用", "\(resets.availableCount) available")
+        L10n.text("\(resets.availableCount) 次可用", "\(resets.availableCount) available", "\(resets.availableCount)回利用可能")
     }
 
     /// The earliest expiry, whole and short: the short form of a date is the date alone; a label without one has none
@@ -441,6 +441,6 @@ struct CodexResetCreditsView: View {
             return (label, label)
         }
         let label = date.formatted(Date.FormatStyle().month(.abbreviated).day().locale(L10n.dateLocale))
-        return (L10n.text("最早 \(label) 到期", "First expires \(label)"), label)
+        return (L10n.text("最早 \(label) 到期", "First expires \(label)", "最初の有効期限：\(label)"), label)
     }
 }

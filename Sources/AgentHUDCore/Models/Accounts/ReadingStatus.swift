@@ -110,7 +110,7 @@ public struct ReadingAssessment: Hashable, Sendable {
     public func accountLabel(now: Date) -> String {
         if isCurrentAccount, status.isNormal { return L10n.text("当前账户", "Current account") }
         let ago = Countdown.formatRough(max(0, now.timeIntervalSince(observedAt ?? now)))
-        return L10n.text("上次读取 \(ago) 前", "Last read \(ago) ago")
+        return L10n.text("上次读取 \(ago) 前", "Last read \(ago) ago", "最終読み取り：\(ago) 前")
     }
 }
 

@@ -14,7 +14,7 @@ public enum ClaudeDataError: Error, Hashable, Sendable, LocalizedError {
         case .engineNotFound:
             return L10n.text("未找到 Claude Code 引擎（claude 命令）", "Claude Code engine (claude command) not found")
         case .engineFailed(let reason):
-            return L10n.text("Claude Code 引擎查询失败：\(reason)", "Claude Code engine query failed: \(reason)")
+            return L10n.text("Claude Code 引擎查询失败：\(reason)", "Claude Code engine query failed: \(reason)", "Claude Code エンジンのクエリに失敗しました：\(reason)")
         case .planLimitsUnavailable:
             return L10n.text("当前登录方式没有订阅额度（API key 或第三方平台）", "No plan limits for this login (API key or third-party platform)")
         case .signedOut:
@@ -122,6 +122,6 @@ public struct ClaudeEngineUsageClient: Sendable {
             if let usage = try ClaudeEngineUsage.parse(line: line) { return usage }
         }
         let stderr = String(decoding: engine.output.stderr, as: UTF8.self)
-        throw ClaudeDataError.engineFailed(stderr.isEmpty ? L10n.text("引擎没有在 \(Int(timeout)) 秒内返回用量", "The engine returned no usage within \(Int(timeout)) s") : String(stderr.prefix(200)))
+        throw ClaudeDataError.engineFailed(stderr.isEmpty ? L10n.text("引擎没有在 \(Int(timeout)) 秒内返回用量", "The engine returned no usage within \(Int(timeout)) s", "エンジンは \(Int(timeout)) 秒以内に使用量を返しませんでした") : String(stderr.prefix(200)))
     }
 }

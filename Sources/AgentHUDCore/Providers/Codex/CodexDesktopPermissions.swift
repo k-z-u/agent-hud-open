@@ -226,7 +226,7 @@ public struct CodexDesktopPermissions: Sendable {
         let displayName = metadata["tool_params_display"].arrayValue?.first(where: { $0["name"].stringValue == "app" })?["value"]
             .stringValue?.trimmingCharacters(in: .whitespacesAndNewlines)
         let name = displayName.flatMap { $0.isEmpty ? nil : $0 } ?? app
-        return Approval(toolName: "computer_use_app", summary: L10n.text("允许 ChatGPT 使用 \(name)？", "Allow ChatGPT to use \(name)?"),
+        return Approval(toolName: "computer_use_app", summary: L10n.text("允许 ChatGPT 使用 \(name)？", "Allow ChatGPT to use \(name)?", "ChatGPT に \(name) の使用を許可しますか？"),
                         subject: app, native: .computerUseApp(persist: persist))
     }
 
@@ -248,7 +248,7 @@ public struct CodexDesktopPermissions: Sendable {
         let name = metadata["connector_name"].stringValue.flatMap { $0.isEmpty ? nil : $0 } ?? "ChatGPT"
         let summary: String
         if tool == "access_browser_origin", let origin, !origin.isEmpty {
-            summary = L10n.text("允许 \(name) 访问 \(origin)？", "Allow \(name) to access \(origin)?")
+            summary = L10n.text("允许 \(name) 访问 \(origin)？", "Allow \(name) to access \(origin)?", "\(name) に \(origin) へのアクセスを許可しますか？")
         } else if let message = params["message"].stringValue?.trimmingCharacters(in: .whitespacesAndNewlines), !message.isEmpty {
             // Desktop's own sentence for the rarer requests, as its card reads.
             summary = message

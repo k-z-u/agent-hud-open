@@ -24,9 +24,9 @@ package struct MCPCommandResult: Equatable, Sendable {
         if let first { return first.count > 160 ? String(first.prefix(159)) + "…" : first }
         guard let status else {
             let seconds = Int(MCPClientCommand.timeout)
-            return L10n.text("\(seconds) 秒内没有完成", "It did not finish in \(seconds) seconds")
+            return L10n.text("\(seconds) 秒内没有完成", "It did not finish in \(seconds) seconds", "\(seconds) 秒以内に完了しませんでした")
         }
-        return L10n.text("退出状态 \(status)", "Exit status \(status)")
+        return L10n.text("退出状态 \(status)", "Exit status \(status)", "終了ステータス \(status)")
     }
 }
 

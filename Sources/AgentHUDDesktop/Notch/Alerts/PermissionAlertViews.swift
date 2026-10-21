@@ -95,7 +95,7 @@ struct PermissionAlertCompactView: View {
         .padding(.horizontal, wings?.padding ?? s(IslandController.alertSidePadding)).frame(height: height)
         .accessibilityIdentifier("island-alert-permissionRequest")
         .accessibilityLabel("\(request.vendor) · \(request.isQuestion ? L10n.text("在问你问题", "Asks a question") : request.isPlan ? L10n.text("有计划待审", "Has a plan to review") : L10n.text("等待批准", "Needs approval")) · \(request.summary)"
-                            + (waiting > 1 ? " · " + L10n.text("共 \(waiting) 个", "\(waiting) waiting") : ""))
+                            + (waiting > 1 ? " · " + L10n.text("共 \(waiting) 个", "\(waiting) waiting", "\(waiting)件待機中") : ""))
     }
 }
 
@@ -192,8 +192,7 @@ struct PermissionClosedRow: View {
         }
         .buttonStyle(.plain)
         .onHover { hovering = $0 }
-        .accessibilityLabel(L10n.text("打开 \(request.vendor) 的请求：\(request.summary)",
-                                      "Open \(request.vendor) request: \(request.summary)"))
+        .accessibilityLabel(L10n.text("打开 \(request.vendor) 的请求：\(request.summary)", "Open \(request.vendor) request: \(request.summary)", "\(request.vendor) のリクエストを開く：\(request.summary)"))
     }
 }
 
@@ -322,8 +321,8 @@ struct PermissionAlertInlineView: View {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 6) {
                     PermissionSymbol(requestID: request.id)
-                    Text(request.isQuestion ? L10n.text("\(request.vendor) 在问你", "\(request.vendor) asks")
-                                            : L10n.text("\(request.vendor) 有计划待审", "\(request.vendor) has a plan to review"))
+                    Text(request.isQuestion ? L10n.text("\(request.vendor) 在问你", "\(request.vendor) asks", "\(request.vendor) からの質問")
+                                            : L10n.text("\(request.vendor) 有计划待审", "\(request.vendor) has a plan to review", "\(request.vendor) に確認待ちの計画があります"))
                         .font(.ui(12, .medium))
                     WaitingCount(waiting: waiting)
                 }
@@ -341,8 +340,8 @@ struct PermissionAlertInlineView: View {
                     PermissionSymbol(requestID: request.id)
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(spacing: 6) {
-                            Text(request.isPlan ? L10n.text("\(request.vendor) 有计划待审", "\(request.vendor) has a plan to review")
-                                                : L10n.text("\(request.vendor) 等待批准", "\(request.vendor) needs approval"))
+                            Text(request.isPlan ? L10n.text("\(request.vendor) 有计划待审", "\(request.vendor) has a plan to review", "\(request.vendor) に確認待ちの計画があります")
+                                                : L10n.text("\(request.vendor) 等待批准", "\(request.vendor) needs approval", "\(request.vendor) の承認が必要です"))
                                 .font(.ui(12, .medium))
                             WaitingCount(waiting: waiting)
                         }
@@ -374,7 +373,7 @@ private struct PlanNotice: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            Text(L10n.text("请到 \(request.vendor) 里审批这份计划", "Review this plan in \(request.vendor)"))
+            Text(L10n.text("请到 \(request.vendor) 里审批这份计划", "Review this plan in \(request.vendor)", "\(request.vendor) でこの計画を承認してください"))
                 .font(.ui(11)).foregroundStyle(color.secondary).lineLimit(1)
             Spacer(minLength: 8)
             Self.dismiss(onDecide, color: color)
@@ -407,7 +406,7 @@ private struct WaitingCount: View {
                 .font(.tabular((10 * scale).rounded(), .semibold)).foregroundStyle(color.secondary)
                 .padding(.horizontal, (5 * scale).rounded()).padding(.vertical, (2 * scale).rounded())
                 .background(color.highlight, in: RoundedRectangle(cornerRadius: 4))
-                .accessibilityLabel(L10n.text("共 \(waiting) 个待批准", "\(waiting) requests waiting"))
+                .accessibilityLabel(L10n.text("共 \(waiting) 个待批准", "\(waiting) requests waiting", "\(waiting) 件のリクエストが待機中"))
         }
     }
 }

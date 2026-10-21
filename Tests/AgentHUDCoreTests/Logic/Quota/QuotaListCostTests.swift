@@ -52,7 +52,7 @@ final class QuotaListCostTests: XCTestCase {
     }
 
     func testAShortAmountDropsItsDecimalsFromAHundredUp() {
-        for language in [AppLanguage.zhHans, .en] {
+        for language in [AppLanguage.zhHans, .ja, .en] {
             L10n.setLanguage(language)
             XCTAssertEqual(MoneyFormat.short(Decimal(string: "3.1")!, currency: "USD"), "$3.10")
             XCTAssertEqual(MoneyFormat.short(Decimal(string: "99.994")!, currency: "USD"), "$99.99")

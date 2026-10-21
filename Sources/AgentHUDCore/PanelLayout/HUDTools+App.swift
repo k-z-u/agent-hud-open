@@ -53,7 +53,11 @@ extension HUDTools {
     /// which no proposal sets.
     func appListing() -> [String: JSONValue] {
         let settings = store.settings.effectiveSettings
-        let written: AppLanguage = L10n.resolved == .zhHans ? .zhHans : .en
+        let written: AppLanguage = switch L10n.resolved {
+        case .zhHans: .zhHans
+        case .ja: .ja
+        case .en: .en
+        }
         return AppDraft(every: settings).json.merging([
             "language": .string(settings.language.rawValue),
             "writtenIn": .string(written.rawValue),

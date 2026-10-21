@@ -161,11 +161,12 @@ private struct ResetCreditAlertCopy {
     func accentFill(_ theme: Theme) -> Color { theme.alertCalmFill }
     func accentText(_ theme: Theme) -> Color { theme.alertCalmText }
     var compactTitle: String {
-        L10n.text("+\(grant.added) 次重置", grant.added == 1 ? "+1 reset" : "+\(grant.added) resets")
+        L10n.text("+\(grant.added) 次重置", grant.added == 1 ? "+1 reset" : "+\(grant.added) resets", "+\(grant.added) 回リセット")
     }
     var title: String {
         L10n.text("此账户新增了 \(grant.added) 次额度重置。",
-                  grant.added == 1 ? "A usage reset was added to this account." : "\(grant.added) usage resets were added to this account.")
+                  grant.added == 1 ? "A usage reset was added to this account." : "\(grant.added) usage resets were added to this account.",
+                  "このアカウントに使用量のリセットが追加されました。")
     }
     /// The account's earliest deadline, as the usage panel names it.
     var expiry: String {

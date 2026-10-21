@@ -156,7 +156,7 @@ final class MCPClientSetup {
             if !result.succeeded {
                 note = .failed(action, result.failureLine)
             } else if added.contains(client) != (action == .add(client)) {
-                note = .failed(action, L10n.text("\(client.name) 的设置里没有相应变化", "\(client.name)'s settings did not change"))
+                note = .failed(action, L10n.text("\(client.name) 的设置里没有相应变化", "\(client.name)'s settings did not change", "\(client.name) の設定は変更されていません"))
             }
         }
     }
@@ -179,22 +179,22 @@ final class MCPClientSetup {
     var title: String {
         let names = addedClients.map(\.name)
         guard !names.isEmpty else { return L10n.text("还没有接入客户端", "Not added to a client yet") }
-        return L10n.text("已接入 \(names.joined(separator: "、"))", "Added to \(Self.joined(names))")
+        return L10n.text("已接入 \(names.joined(separator: "、"))", "Added to \(Self.joined(names))", "\(Self.joined(names)) に追加しました")
     }
 
     /// One line under it on where things stand: a command running, what happened last, or what to do next.
     func detail(toolsOn: Bool) -> String {
         switch running {
-        case .add(let client)?: return L10n.text("正在接入 \(client.name)…", "Adding to \(client.name)…")
-        case .remove(let client)?: return L10n.text("正在从 \(client.name) 移除…", "Removing from \(client.name)…")
+        case .add(let client)?: return L10n.text("正在接入 \(client.name)…", "Adding to \(client.name)…", "\(client.name) に追加しています…")
+        case .remove(let client)?: return L10n.text("正在从 \(client.name) 移除…", "Removing from \(client.name)…", "\(client.name) から削除しています…")
         case .copySettings?, nil: break
         }
         switch note {
         case .failed(.remove(let client), let line)?:
-            return L10n.text("没能从 \(client.name) 移除：\(line)", "Couldn't remove from \(client.name): \(line)")
+            return L10n.text("没能从 \(client.name) 移除：\(line)", "Couldn't remove from \(client.name): \(line)", "\(client.name) から削除できませんでした：\(line)")
         case .failed(let action, let line)?:
             let name = action.client?.name ?? ""
-            return L10n.text("没能接入 \(name)：\(line)", "Couldn't add to \(name): \(line)")
+            return L10n.text("没能接入 \(name)：\(line)", "Couldn't add to \(name): \(line)", "\(name) に追加できませんでした：\(line)")
         case .copiedCommand?: return L10n.text("已拷贝命令，粘贴到终端运行。", "Command copied. Paste it into Terminal.")
         case .copiedSettings?:
             return L10n.text("已拷贝配置，粘贴到客户端的 MCP 设置里。", "Settings copied. Paste them into your client's MCP settings.")
@@ -205,8 +205,7 @@ final class MCPClientSetup {
         if !names.isEmpty {
             guard toolsOn else { return L10n.text("打开上面的开关，Agent 才能用。", "Turn on the switch above so agents can use it.") }
             if names.count == 1 {
-                return L10n.text("在 \(names[0].name) 里新开一个会话，说“把 HUD 改成……”。",
-                                 "Start a new \(names[0].name) session and ask it to change the HUD.")
+                return L10n.text("在 \(names[0].name) 里新开一个会话，说“把 HUD 改成……”。", "Start a new \(names[0].name) session and ask it to change the HUD.", "\(names[0].name) で新しいセッションを開始し、HUD の変更を依頼してください。")
             }
             return L10n.text("新开一个会话，说“把 HUD 改成……”。", "Start a new session and ask it to change the HUD.")
         }
@@ -215,8 +214,7 @@ final class MCPClientSetup {
         }
         if clients.isEmpty {
             let supported = MCPClient.allCases.map(\.name)
-            return L10n.text("这台 Mac 上没有 \(supported.joined(separator: " 或 "))，可以拷贝配置给其他客户端。",
-                             "No \(supported.joined(separator: " or ")) on this Mac. Copy the settings for another client.")
+            return L10n.text("这台 Mac 上没有 \(supported.joined(separator: " 或 "))，可以拷贝配置给其他客户端。", "No \(supported.joined(separator: " or ")) on this Mac. Copy the settings for another client.", "この Mac には \(supported.joined(separator: " または ")) がありません。別のクライアント用に設定をコピーしてください。")
         }
         return L10n.text("从右边的菜单选一个客户端接入。", "Pick a client from the menu to add it.")
     }

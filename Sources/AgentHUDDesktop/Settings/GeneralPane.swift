@@ -24,7 +24,8 @@ struct GeneralPane: View {
                     subtitle: L10n.text("每个窗口和菜单栏菜单采用所在屏幕的 HUD 外观、材质和透明度，移到另一块屏幕时跟着变。Clear 玻璃在正在使用的窗口里由系统画得更清透，到了后台才是磨砂。",
                                         "Each window and the menu-bar menu take the HUD look, material and transparency of the "
                                             + "screen they are on, and change with it when moved. macOS draws Clear glass sharper "
-                                            + "in the window in use, and frosted once it is in the background."),
+                                            + "in the window in use, and frosted once it is in the background.",
+                                        "各ウィンドウとメニューバーのメニューは、表示されている画面の HUD の外観・マテリアル・透明度を使い、別の画面へ移すとそれに合わせて変わります。Clear ガラスは使用中のウィンドウではシステムがより鮮明に描画し、バックグラウンドでは磨りガラスになります。"),
                     tag: L10n.text("实验", "Experimental"),
                     isOn: settings.binding(\.appearanceFollowsScreen)
                 )
@@ -32,6 +33,7 @@ struct GeneralPane: View {
                 SettingRow(label: L10n.text("语言", "Language")) {
                     Picker(L10n.text("语言", "Language"), selection: settings.binding(\.language)) {
                         Text(L10n.text("跟随系统", "System")).tag(AppLanguage.system)
+                        Text("日本語").tag(AppLanguage.ja)
                         Text("中文").tag(AppLanguage.zhHans)
                         Text("English").tag(AppLanguage.en)
                     }
@@ -53,7 +55,7 @@ struct GeneralPane: View {
                                                "After this, an unanswered permission request goes back to the client's own prompt.")) {
                     Picker(L10n.text("等待回答", "Wait for an answer"), selection: settings.binding(\.approvalWaitMinutes)) {
                         ForEach(Settings.approvalWaitChoices, id: \.self) { minutes in
-                            Text(L10n.text("\(minutes) 分钟", minutes == 1 ? "1 minute" : "\(minutes) minutes")).tag(minutes)
+                            Text(L10n.text("\(minutes) 分钟", minutes == 1 ? "1 minute" : "\(minutes) minutes", "\(minutes)分")).tag(minutes)
                         }
                     }
                     .labelsHidden().pickerStyle(.menu)
@@ -104,6 +106,15 @@ private struct ClientHooksSetting: View {
                 • The waiting-for-approval state of Claude Code sessions
                 • Running status and completion reminders for Pi
                 Usage, quota and session statistics are unaffected. Turned back on, Codex asks you to trust its hook again in /hooks.
+                """,
+                """
+                Agent HUD は各クライアントの設定に追加したフックを削除し、以後は書き戻しません。オフにすると次の機能が失われます：
+                ・HUD での Claude Code、Codex、CodeBuddy、WorkBuddy、ZCode、Qwen Code、Qoder、Devin CLI の権限リクエストへの回答
+                ・HUD での互換 DeepSeek Harness Web ホストの質問への回答
+                ・Antigravity、Cursor、GitHub Copilot CLI、CodeBuddy、Qwen Code、OpenCode、Devin CLI の完了リマインダー
+                ・Claude Code セッションの承認待ち状態
+                ・Pi の実行状態と完了リマインダー
+                使用量、クォータ、セッション統計には影響しません。再度オンにすると、Codex は /hooks でフックを再信頼する必要があります。
                 """))
         }
     }

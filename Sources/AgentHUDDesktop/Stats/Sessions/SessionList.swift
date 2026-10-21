@@ -114,7 +114,7 @@ struct SessionList: View {
                 Text(Self.title(day, today: today, calendar: calendar)).font(.ui(13, .semibold)).foregroundStyle(theme.text)
                 Text("\(sessions.count)").font(.tabular(11))
                 if running > 0 {
-                    Text(L10n.text("\(running) 个运行中", "\(running) running")).font(.ui(11)).foregroundStyle(theme.status(.ok))
+                    Text(L10n.text("\(running) 个运行中", "\(running) running", "\(running)件実行中")).font(.ui(11)).foregroundStyle(theme.status(.ok))
                 }
                 Spacer(minLength: 8)
                 if !open {
@@ -168,7 +168,7 @@ struct SessionsTodayCard: View {
         let present = TokenKind.allCases.filter { kinds[$0] > 0 }
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .firstTextBaseline) {
-                Text(L10n.text("今天 · \(sessions.count) 个会话", sessions.count == 1 ? "Today · 1 session" : "Today · \(sessions.count) sessions"))
+                Text(L10n.text("今天 · \(sessions.count) 个会话", sessions.count == 1 ? "Today · 1 session" : "Today · \(sessions.count) sessions", "今日 · \(sessions.count)セッション"))
                     .font(.ui(13, .semibold))
                 Spacer(minLength: 8)
                 if let costs {
@@ -337,7 +337,7 @@ struct SessionCard: View {
     /// The state as the phone is told it, the turns, and how long the turn in flight has run or how long ago the session
     /// was last active.
     private func status(_ usage: SessionUsage?, dot: SessionDot) -> String {
-        let turns = usage.flatMap { $0.turnCount > 0 ? L10n.text("\($0.turnCount) 轮", $0.turnCount == 1 ? "1 turn" : "\($0.turnCount) turns") : nil }
+        let turns = usage.flatMap { $0.turnCount > 0 ? L10n.text("\($0.turnCount) 轮", $0.turnCount == 1 ? "1 turn" : "\($0.turnCount) turns", "\($0.turnCount)ターン") : nil }
         let interval = store.now.timeIntervalSince(Self.elapsedStart(session, store: store))
         let elapsed = dot == .ended ? Countdown.age(interval) : Countdown.format(interval)
         return [Self.state(session, dot: dot, store: store), turns, elapsed].compactMap { $0 }.joined(separator: " · ")

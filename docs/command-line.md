@@ -10,7 +10,7 @@ Launch options, read-only probes, adapter commands and the MCP server of the sta
 | --- | --- |
 | `--demo` | Use the sample data (`DemoUsageProvider`, `DemoData`) instead of installed clients; see [The sample](#the-sample). Preferences live in the separate `app.agenthud.open.demo` defaults domain, no report cache is written, and no adapters are installed. A demo saved with rows the sample no longer has starts over from the sample's rows and keeps its other preferences. |
 | `--demo-tools` | With `--demo`, answer the [MCP tools](#mcp-server) from the demo, so an agent can arrange the panel on the sample while a person watches or records it; a layout saved there is kept in the demo's preferences. One process serves the tools' socket, whichever started first: a demo started with this switch answers every tool call until it quits, and the real copy started after it answers none, even once the demo has quit, until it is itself started again. Without `--demo` it changes nothing. |
-| `--lang zh\|en\|system` | Force the interface language for this launch (`zh`, `zh-hans` and `cn` select Simplified Chinese). The choice is saved to the preferences in use. |
+| `--lang zh\|ja\|en\|system` | Force the interface language for this launch (`zh`, `zh-hans` and `cn` select Simplified Chinese; `ja` and `jp` select Japanese). The choice is saved to the preferences in use. |
 | `--show-settings` | Open the settings window after start. |
 | `--show-stats` | Open the statistics window after start. |
 | `--open-panel` | Start with the notch panel expanded. |

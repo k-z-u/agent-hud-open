@@ -71,7 +71,7 @@ struct UsagePeriodsCard: View {
                     if ranked.count > Self.listed {
                         let rest = ranked.dropFirst(Self.listed)
                         HStack {
-                            Text(L10n.text("其余 \(rest.count) 个", "\(rest.count) more"))
+                            Text(L10n.text("其余 \(rest.count) 个", "\(rest.count) more", "ほか\(rest.count)件"))
                             Spacer(minLength: 4)
                             Text(TokenFormat.short(rest.reduce(0) { $0 + counts[$1.id]! })).font(.tabular(11))
                         }

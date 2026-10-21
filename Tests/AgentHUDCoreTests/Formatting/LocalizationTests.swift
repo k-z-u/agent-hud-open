@@ -12,7 +12,9 @@ final class LocalizationTests: XCTestCase {
         XCTAssertEqual(L10n.systemLanguage(preferred: ["zh-Hans-CN", "en-US"]), .zhHans)
         XCTAssertEqual(L10n.systemLanguage(preferred: ["zh-Hant-TW"]), .zhHans, "traditional Chinese users get Chinese rather than English")
         XCTAssertEqual(L10n.systemLanguage(preferred: ["en-US", "zh-Hans-CN"]), .en)
-        XCTAssertEqual(L10n.systemLanguage(preferred: ["ja-JP"]), .en, "unsupported languages fall back to English")
+        XCTAssertEqual(L10n.systemLanguage(preferred: ["ja-JP"]), .ja)
+        XCTAssertEqual(L10n.systemLanguage(preferred: ["ja", "en-US"]), .ja)
+        XCTAssertEqual(L10n.systemLanguage(preferred: ["en-US", "ja-JP"]), .en)
         XCTAssertEqual(L10n.systemLanguage(preferred: []), .en)
     }
 
@@ -23,6 +25,10 @@ final class LocalizationTests: XCTestCase {
         L10n.setLanguage(.zhHans)
         XCTAssertEqual(L10n.resolved, .zhHans)
         XCTAssertEqual(L10n.text("中文", "English"), "中文")
+        L10n.setLanguage(.ja)
+        XCTAssertEqual(L10n.resolved, .ja)
+        XCTAssertEqual(L10n.text("设置", "Settings"), "設定")
+        XCTAssertEqual(L10n.text("没有翻译", "Untranslated"), "Untranslated", "a pair without a translation falls back to English")
         L10n.setLanguage(.system)
         XCTAssertEqual(L10n.language, .system)
         XCTAssertEqual(L10n.resolved, L10n.systemLanguage())
@@ -40,6 +46,11 @@ final class LocalizationTests: XCTestCase {
         XCTAssertEqual(keys.map(L10n.modelLabel), ["Current session", "Weekly limit · All models", "Weekly limit · Fable",
                                                    "Weekly limit · Mythos preview", "Account quota"])
         XCTAssertEqual(keys.map(L10n.shortModelLabel), ["5h", "Weekly", "Fable", "Mythos", "Quota"])
+        L10n.setLanguage(.ja)
+        XCTAssertEqual(keys.map(L10n.modelLabel), ["Current session", "Weekly limit · All models", "Weekly limit · Fable",
+                                                   "Weekly limit · Mythos preview", "Account quota"],
+                       "quota window names stay English for every device that reads the Mac's data")
+        XCTAssertEqual(keys.map(L10n.shortModelLabel), ["5h", "Weekly", "Fable", "Mythos", "Quota"])
     }
 
     func testRealModelNamesPassThrough() {
@@ -56,6 +67,10 @@ final class LocalizationTests: XCTestCase {
         XCTAssertEqual(L10n.sourceLabel(L10n.sourceBrowserAuth), "需浏览器授权")
         L10n.setLanguage(.en)
         XCTAssertEqual(L10n.sourceLabel(L10n.sourceNotConnected), "Not connected")
+        L10n.setLanguage(.ja)
+        XCTAssertEqual(L10n.sourceLabel(L10n.sourceNotConnected), "未接続")
+        XCTAssertEqual(L10n.sourceLabel(L10n.sourceBrowserAuth), "ブラウザ認証が必要")
+        XCTAssertEqual(L10n.sourceLabel(L10n.sourceClaudeSessions), "Claude Code セッション")
         XCTAssertEqual(L10n.sourceLabel("custom-source"), "custom-source", "unknown keys are shown verbatim")
     }
 
@@ -66,6 +81,9 @@ final class LocalizationTests: XCTestCase {
         L10n.setLanguage(.en)
         XCTAssertEqual(L10n.weekdayNames, ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"])
         XCTAssertEqual(L10n.weekdayNamesMondayFirst.last, "Sun")
+        L10n.setLanguage(.ja)
+        XCTAssertEqual(L10n.weekdayNames, ["日", "月", "火", "水", "木", "金", "土"])
+        XCTAssertEqual(L10n.weekdayNamesMondayFirst, ["月", "火", "水", "木", "金", "土", "日"])
     }
 
     func testLocalizedFormattersSwitchLanguage() {
@@ -73,6 +91,8 @@ final class LocalizationTests: XCTestCase {
         XCTAssertEqual(StatsRange.allCases.map(\.label), ["5 h", "24 h", "7 days", "30 days"])
         L10n.setLanguage(.zhHans)
         XCTAssertEqual(StatsRange.allCases.map(\.label), ["5 小时", "24 小时", "7 天", "30 天"])
+        L10n.setLanguage(.ja)
+        XCTAssertEqual(StatsRange.allCases.map(\.label), ["5時間", "24時間", "7日", "30日"])
     }
 
     func testLanguageSettingRoundTripsThroughJSON() throws {
@@ -81,8 +101,20 @@ final class LocalizationTests: XCTestCase {
         let data = try JSONEncoder().encode(settings)
         let decoded = try JSONDecoder().decode(Settings.self, from: data)
         XCTAssertEqual(decoded.language, .en)
+        settings.language = .ja
+        let japanese = try JSONDecoder().decode(Settings.self, from: JSONEncoder().encode(settings))
+        XCTAssertEqual(japanese.language, .ja)
         let legacy = try JSONDecoder().decode(Settings.self, from: Data("{}".utf8))
         XCTAssertEqual(legacy.language, .system, "settings saved before the language option default to following the system")
+    }
+
+    func testJapaneseTableUsesThePairAsItsContext() {
+        L10n.setLanguage(.ja)
+        XCTAssertEqual(L10n.text("设置", "Settings"), "設定")
+        XCTAssertEqual(L10n.text("批准一次", "Allow once"), "今回のみ許可")
+        XCTAssertEqual(L10n.text("共 ", "Of "), "/ ", "edge whitespace is kept for the code that joins the string")
+        XCTAssertEqual(L10n.text("显示", "Display"), "表示", "the verb")
+        XCTAssertEqual(L10n.text("显示器", "Display"), "ディスプレイ", "the screen")
     }
 
     @MainActor
@@ -95,16 +127,17 @@ final class LocalizationTests: XCTestCase {
         L10n.setLanguage(.en)
 
         let languages: [(AppLanguage, String)] = [
-            (.zhHans, "中文"),
-            (.en, "English"),
-            (.system, L10n.systemLanguage() == .zhHans ? "中文" : "English"),
+            (.zhHans, "设置"),
+            (.ja, "設定"),
+            (.en, "Settings"),
+            (.system, L10n.systemLanguage() == .zhHans ? "设置" : L10n.systemLanguage() == .ja ? "設定" : "Settings"),
         ]
         for (language, text) in languages {
             let changed = expectation(description: "settings notified for \(language)")
             withObservationTracking {
                 _ = store.settings.language
             } onChange: {
-                XCTAssertEqual(L10n.text("中文", "English"), text,
+                XCTAssertEqual(L10n.text("设置", "Settings"), text,
                                "The first render after a language change must use the new language")
                 changed.fulfill()
             }

@@ -59,7 +59,7 @@ public enum StatsRange: Int, CaseIterable, Sendable, Hashable {
     /// The chart's buckets for the range: a month only by day.
     public var bucketSizes: [TokenBucketSize] { self == .days30 ? [.day1] : TokenBucketSize.allCases }
 
-    public var recentLabel: String { L10n.text("近 \(label)", "Last \(label)") }
+    public var recentLabel: String { L10n.text("近 \(label)", "Last \(label)", "過去\(label)") }
 
     public func interval(endingAt now: Date) -> DateInterval {
         DateInterval(start: now.addingTimeInterval(-Double(hours) * 3600), end: now)
@@ -240,7 +240,11 @@ public enum ChartData {
         if delta <= 3 {
             let zh = String(repeating: "下", count: delta) + weekdayTime(date, calendar: calendar)
             let en = delta == 1 ? "Next \(weekdayTime(date, calendar: calendar))" : dateTime(date, calendar: calendar)
-            return L10n.text(zh, en)
+            let weekday = weekdayName(date, calendar: calendar)
+            let clock = String(format: "%02d:%02d", calendar.component(.hour, from: date), calendar.component(.minute, from: date))
+            let ja = delta == 1 ? "来週の\(weekday)曜 \(clock)"
+                : delta == 2 ? "再来週の\(weekday)曜 \(clock)" : dateTime(date, calendar: calendar)
+            return L10n.text(zh, en, ja)
         }
         return dateTime(date, calendar: calendar)
     }

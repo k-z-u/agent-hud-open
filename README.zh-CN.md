@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> · <strong>简体中文</strong> · <a href="https://agenthud.app">官网</a> · <a href="#支持的-agent">支持的 agent</a> · <a href="#文档">文档</a>
+  <a href="README.md">English</a> · <a href="README.ja.md">日本語</a> · <strong>简体中文</strong> · <a href="https://agenthud.app">官网</a> · <a href="#支持的-agent">支持的 agent</a> · <a href="#文档">文档</a>
 </p>
 
 <p align="center">
@@ -121,7 +121,7 @@ iPhone 与 Apple Watch 版 Agent HUD 显示 Mac 采集到的数据：额度、�
 | **简&#8288;约** | 停靠在任意屏幕边缘的小型悬浮面板：每个 agent 的图标外套一个圆环，画的是它用量最高的那项额度，旁边写着百分比。 |
 | **动&#8288;态** | 沿任意屏幕边缘排成一排的 agent 图标，背后是光晕。agent 工作时，它的图标会变成 Bot。 |
 
-**设置。** 可以选择显示哪些账户与额度，每块屏幕的形态、大小与光晕，以及面板包含哪些内容。界面支持英文与简体中文。按 **⌘⌥H** 隐藏或显示光晕。
+**设置。** 可以选择显示哪些账户与额度，每块屏幕的形态、大小与光晕，以及面板包含哪些内容。界面支持英文、日文与简体中文。按 **⌘⌥H** 隐藏或显示光晕。
 
 ## 支持的 agent
 

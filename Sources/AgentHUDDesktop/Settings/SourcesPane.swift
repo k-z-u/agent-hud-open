@@ -24,7 +24,7 @@ struct SourcesPane: View {
         let groupIDs = groups.map(\.id), movableGroups = Set(groups.filter(\.isDetected).map(\.id))
         HStack(alignment: .top, spacing: 20) {
             VStack(alignment: .leading, spacing: 12) {
-                Text(L10n.text("\(groups.count) 个智能体", "\(groups.count) agents"))
+                Text(L10n.text("\(groups.count) 个智能体", "\(groups.count) agents", "\(groups.count)件のエージェント"))
                     .font(.ui(11)).foregroundStyle(theme.secondary)
                     .padding(.horizontal, 6)
                 ScrollView {
@@ -121,7 +121,8 @@ private struct AgentProviderRow: View {
                             .lineLimit(2)
                         if !group.agents.isEmpty {
                             Text(L10n.text("显示 \(group.displayedCount(settings: settings.settings))/\(group.agents.count)",
-                                           "Showing \(group.displayedCount(settings: settings.settings))/\(group.agents.count)"))
+                                           "Showing \(group.displayedCount(settings: settings.settings))/\(group.agents.count)",
+                                           "表示中：\(group.displayedCount(settings: settings.settings))/\(group.agents.count)"))
                                 .font(.tabular(10)).foregroundStyle(theme.secondary)
                         } else if let source = group.source {
                             Text(source.state == .installed ? L10n.text("已安装", "Installed") : source.statusLabel)
@@ -330,7 +331,7 @@ private struct AccountVisibilityToggle: View {
             set: { settings.setAccount(id: id, visible: $0) }
         ))
         .labelsHidden().toggleStyle(.switch).controlSize(.small)
-        .accessibilityLabel(L10n.text("在 HUD 中显示 \(name)", "Show \(name) in HUD"))
+        .accessibilityLabel(L10n.text("在 HUD 中显示 \(name)", "Show \(name) in HUD", "HUD に \(name) を表示"))
         .accessibilityIdentifier("account-visibility-\(id)")
         .help(L10n.text("显示此账户的额度和余额。历史会话和 Token 统计持续更新。",
                        "Show this account's quotas and balances. Session history and token usage keep updating."))
@@ -375,7 +376,7 @@ struct ClientObserverStatus {
             open = L10n.text("已经开着的 Pi 输入一次 /reload 后开始报告", "Pi sessions already open report after /reload")
             unsupported = PiSessionObserver.unsupportedVersion().map {
                 let first = PiSessionObserver.firstSettlingRelease
-                return L10n.text("Pi \(first) 起才会报告完成，这里的 Pi 是 \($0)。", "Pi \(first) and later report finished turns; this Pi is \($0).")
+                return L10n.text("Pi \(first) 起才会报告完成，这里的 Pi 是 \($0)。", "Pi \(first) and later report finished turns; this Pi is \($0).", "Pi \(first) 以降は完了したターンを報告します。この Pi は \($0) です。")
             }
         case "OpenCode":
             label = L10n.text("OpenCode 插件", "OpenCode plugin")
@@ -402,7 +403,7 @@ struct ClientObserverStatus {
                 detail = unsupported
             } else if let last {
                 let ago = Countdown.formatRough(max(0, now.timeIntervalSince(last)))
-                detail = L10n.text("上次报告 \(ago) 前。", "Last report \(ago) ago. ") + open + L10n.text("。", ".")
+                detail = L10n.text("上次报告 \(ago) 前。", "Last report \(ago) ago. ", "最終レポート：\(ago) 前。") + open + L10n.text("。", ".")
             } else {
                 detail = L10n.text("还没有报告。", "No reports yet. ") + open + L10n.text("，新开的会自动加载。", "; new ones load it on their own.")
             }

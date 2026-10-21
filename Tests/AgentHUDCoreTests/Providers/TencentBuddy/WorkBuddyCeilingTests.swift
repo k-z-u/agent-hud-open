@@ -6,6 +6,16 @@ import XCTest
 /// the plan a model went through wins over its 429. Also the names its models read as, and CodeBuddy Code pointed at
 /// WorkBuddy's folder.
 final class WorkBuddyCeilingTests: XCTestCase, @unchecked Sendable {
+    override func setUp() {
+        super.setUp()
+        L10n.setLanguage(.en)
+    }
+
+    override func tearDown() {
+        L10n.setLanguage(.system)
+        super.tearDown()
+    }
+
     let now = Date(timeIntervalSince1970: 1_788_800_000)
 
     final class Box<Value>: @unchecked Sendable {

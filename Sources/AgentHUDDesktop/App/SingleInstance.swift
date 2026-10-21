@@ -23,8 +23,7 @@ public enum SingleInstance {
             alert.messageText = L10n.text("Agent HUD 已在运行", "Agent HUD is already running")
             if let holder {
                 let place = (holder.path as NSString).abbreviatingWithTildeInPath
-                alert.informativeText = L10n.text("正在运行的是 \(place)。请先退出它，再打开这一个。",
-                                                  "\(place) is running. Quit it first, then open this one.")
+                alert.informativeText = L10n.text("正在运行的是 \(place)。请先退出它，再打开这一个。", "\(place) is running. Quit it first, then open this one.", "\(place) が実行中です。先に終了してから、こちらを開いてください。")
             } else {
                 alert.informativeText = L10n.text("请先退出正在运行的 Agent HUD，再打开这一个。",
                                                   "Quit the Agent HUD that is running first, then open this one.")

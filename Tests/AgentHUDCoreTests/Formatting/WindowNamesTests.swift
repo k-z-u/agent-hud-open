@@ -13,7 +13,7 @@ final class WindowNamesTests: XCTestCase {
     /// Builds the service response under either language; the persisted full and short names must stay English.
     private func assertNames(_ name: String, expected: [(String, String)],
                              file: StaticString = #filePath, line: UInt = #line, _ build: () throws -> [(String, String)]) rethrows {
-        for language in [AppLanguage.zhHans, .en] {
+        for language in [AppLanguage.zhHans, .ja, .en] {
             L10n.setLanguage(language)
             let names = try build()
             XCTAssertEqual(names.map { $0.0 }, expected.map { $0.0 }, "\(name), full, \(language)", file: file, line: line)

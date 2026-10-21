@@ -108,7 +108,7 @@ final class MoneyFormatTests: XCTestCase {
 
     /// A price is written with its ISO code in both languages, as the website writes it; an estimate keeps the symbol.
     func testPricesCarryTheirCodeAndEstimatesTheSymbol() {
-        for language in [AppLanguage.zhHans, .en] {
+        for language in [AppLanguage.zhHans, .ja, .en] {
             L10n.setLanguage(language)
             XCTAssertEqual(MoneyFormat.price(Decimal(string: "2.99")!, currency: "USD"), "USD 2.99")
             XCTAssertEqual(MoneyFormat.price(Decimal(string: "29.99")!, currency: "USD"), "USD 29.99")

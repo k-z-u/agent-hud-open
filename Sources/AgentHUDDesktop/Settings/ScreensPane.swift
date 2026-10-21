@@ -314,7 +314,8 @@ struct ScreensPane: View {
         guard atHardwareNotch else { return nil }
         return L10n.text("刘海那一行始终是深色：收起时纯黑，提醒两翼在玻璃下是黑玻璃；展开的面板和卡片使用这里的外观。",
                          "The notch's row stays dark: black at rest, and a reminder's wings black glass under Glass; the "
-                            + "panel and cards that open from it take this look.")
+                            + "panel and cards that open from it take this look.",
+                         "ノッチの行は常に暗色です。収納時は純黒、リマインダーの両翼は Glass の下で黒いガラスになります。開くパネルとカードはここの外観を使います。")
     }
 
     private func resetPosition() {

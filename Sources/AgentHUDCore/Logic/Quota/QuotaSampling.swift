@@ -29,6 +29,6 @@ public struct QuotaSampling: Hashable, Codable, Sendable {
         // Round down the observed span: a partial minute must not claim the minimum has been met.
         let observed = elapsed < 60 ? L10n.text("不足1分", "less than 1m") : Countdown.forecast(floor(elapsed / 60) * 60)
         let minimum = Countdown.forecast(required)
-        return reason + "\n" + L10n.text("已采样 \(observed)，预测至少需要\(minimum)的有效记录", "Sampled \(observed); at least \(minimum) of readings needed")
+        return reason + "\n" + L10n.text("已采样 \(observed)，预测至少需要\(minimum)的有效记录", "Sampled \(observed); at least \(minimum) of readings needed", "サンプル数 \(observed)。少なくとも \(minimum) 件の測定値が必要です")
     }
 }

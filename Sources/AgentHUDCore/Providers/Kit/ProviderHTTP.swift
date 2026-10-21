@@ -61,6 +61,6 @@ struct ProviderHTTPError: LocalizedError, Sendable {
     var errorDescription: String? {
         isAuthentication
             ? L10n.text("现有登录已失效或无额度读取权限", "Existing sign-in expired or quota access is unavailable")
-            : L10n.text("额度服务返回 HTTP \(status)", "Quota service returned HTTP \(status)")
+            : L10n.text("额度服务返回 HTTP \(status)", "Quota service returned HTTP \(status)", "クォータサービスが HTTP \(status) を返しました")
     }
 }

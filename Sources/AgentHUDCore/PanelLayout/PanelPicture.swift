@@ -101,6 +101,6 @@ public enum IdentityMask {
     /// A session row's name in the picture, in place of its title and its project: the row's place in the list,
     /// counted from 1.
     public static func session(at position: Int) -> String {
-        L10n.text("会话 \(position)", "Session \(position)")
+        L10n.text("会话 \(position)", "Session \(position)", "セッション \(position)")
     }
 }

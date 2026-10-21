@@ -6,7 +6,7 @@ public enum MoneyFormat {
     public static func amount(_ amount: Decimal, currency: String, estimated: Bool = false) -> String {
         let format = Decimal.FormatStyle.Currency(code: currency)
             .presentation(.narrow)
-            .locale(Locale(identifier: L10n.resolved == .zhHans ? "zh_CN" : "en_US"))
+            .locale(L10n.numberLocale)
             .precision(.fractionLength(2...(estimated ? 6 : 2)))
         let minimum = Decimal(string: "0.000001")!
         if estimated, amount > 0, amount < minimum {
@@ -21,7 +21,7 @@ public enum MoneyFormat {
     public static func short(_ amount: Decimal, currency: String) -> String {
         let format = Decimal.FormatStyle.Currency(code: currency)
             .presentation(.narrow)
-            .locale(Locale(identifier: L10n.resolved == .zhHans ? "zh_CN" : "en_US"))
+            .locale(L10n.numberLocale)
         var exact = amount, cents = Decimal()
         NSDecimalRound(&cents, &exact, 2, .bankers)
         let cent = Decimal(string: "0.01")!

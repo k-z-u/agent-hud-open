@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <strong>English</strong> · <a href="README.zh-CN.md">简体中文</a> · <a href="https://agenthud.app">Website</a> · <a href="#supported-agents">Supported agents</a> · <a href="#documentation">Documentation</a>
+  <strong>English</strong> · <a href="README.ja.md">日本語</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="https://agenthud.app">Website</a> · <a href="#supported-agents">Supported agents</a> · <a href="#documentation">Documentation</a>
 </p>
 
 <p align="center">
@@ -121,7 +121,7 @@ The last three need Agent HUD Remote on the same network too. It is a subscripti
 | **Simple** | A small floating panel on any screen edge: each agent's logo in a ring of its most used quota, with the percentage beside it. |
 | **Dynamic** | A row of agent logos on any screen edge, with the glow behind them. A logo becomes its bot while its agent works. |
 
-**Settings.** Choose the accounts and quotas to show, each display's mode, size and glow, and what the panel contains. The app runs in English or Simplified Chinese. **⌘⌥H** hides or shows the glow.
+**Settings.** Choose the accounts and quotas to show, each display's mode, size and glow, and what the panel contains. The app runs in English, Japanese or Simplified Chinese. **⌘⌥H** hides or shows the glow.
 
 ## Supported agents
 

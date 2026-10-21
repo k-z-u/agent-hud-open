@@ -27,7 +27,7 @@ struct AgentCards: View {
                 Spacer()
                 Button { picking.toggle() } label: {
                     HStack(spacing: 4) {
-                        Text(L10n.text("显示 \(cards.count) 个", "\(cards.count) shown"))
+                        Text(L10n.text("显示 \(cards.count) 个", "\(cards.count) shown", "\(cards.count)件表示"))
                         Image(systemName: "chevron.down").font(.ui(9, .semibold))
                     }
                     .contentShape(Rectangle())
@@ -232,7 +232,7 @@ private struct AgentCard: View {
             Text(VendorCatalog.name(vendor)).font(.ui(13, .semibold)).lineLimit(1)
             Spacer(minLength: 4)
             if let share {
-                Text(L10n.text("占 ", "") + share)
+                Text(L10n.text("占 ", "", "シェア ") + share)
                     .font(.tabular(11)).foregroundStyle(theme.secondary)
                     .padding(.horizontal, 7).padding(.vertical, 2)
                     .background(Capsule().fill(theme.segmentBackground))
@@ -300,7 +300,7 @@ private struct AgentCard: View {
                     .help(models[index].cost.map { $0.text + L10n.text(" 按 API 价", " at API prices") } ?? L10n.text("没有公开价", "No list price"))
             }
             if named < models.count {
-                modelRow(theme.tertiary, L10n.text("其余 \(models.count - named) 个模型", "\(models.count - named) more models"),
+                modelRow(theme.tertiary, L10n.text("其余 \(models.count - named) 个模型", "\(models.count - named) more models", "ほか\(models.count - named)モデル"),
                          counts[named...].reduce(0, +), of: sum)
                     .foregroundStyle(theme.secondary)
                     .help(models[named...].map { store.consumerName($0.agentId) }.joined(separator: L10n.text("、", ", ")))

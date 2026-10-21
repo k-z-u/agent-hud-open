@@ -30,7 +30,8 @@ struct IslandPane: View {
         if let screen, layout.ownLayout(of: screen) != nil, let name = screens.first(where: { $0.key == screen })?.name {
             return samples + "\n" + L10n.text("开关改的是 \(name) 自己的布局，其他显示器不受影响。",
                                                "The switches set the layout of its own that \(name) uses, which no other "
-                                                   + "display draws.")
+                                                   + "display draws.",
+                                               "スイッチが変えるのは \(name) 自身のレイアウトで、ほかのディスプレイには影響しません。")
         }
         let own = screens.filter { layout.ownLayout(of: $0.key) != nil }.map(\.name)
         guard !own.isEmpty else { return samples }
@@ -40,7 +41,8 @@ struct IslandPane: View {
                                                + (own.count == 1 ? "uses a layout of its own" : "use layouts of their own")
                                                + ", which they leave as it is. Choose "
                                                + (own.count == 1 ? "it" : "one")
-                                               + " above to set its switches.")
+                                               + " above to set its switches.",
+                                           "スイッチが変えるのは共有レイアウトです。\(names) は独自のレイアウトを使っているため影響を受けません。上で選択すると、そのスイッチを変更できます。")
     }
 
     /// What the hover delay and the collapse delay are set in, in milliseconds, as an agent's draft of them is held to.

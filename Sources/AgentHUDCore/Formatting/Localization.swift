@@ -1,14 +1,17 @@
 import Foundation
 
-/// UI language. `.system` follows the user's preferred languages (Chinese → Simplified Chinese, otherwise English).
+/// UI language. `.system` follows the user's preferred languages (Chinese → Simplified Chinese, Japanese → Japanese,
+/// otherwise English).
 public enum AppLanguage: String, Codable, Sendable, CaseIterable {
     case system
     case zhHans = "zh-Hans"
+    case ja
     case en
 }
 
 public enum ResolvedLanguage: Sendable {
     case zhHans
+    case ja
     case en
 }
 
@@ -34,6 +37,7 @@ public enum L10n {
     public static var resolved: ResolvedLanguage {
         switch language {
         case .zhHans: return .zhHans
+        case .ja: return .ja
         case .en: return .en
         case .system: return systemLanguage()
         }
@@ -41,17 +45,41 @@ public enum L10n {
 
     public static func systemLanguage(preferred: [String] = Locale.preferredLanguages) -> ResolvedLanguage {
         guard let first = preferred.first?.lowercased() else { return .en }
-        return first.hasPrefix("zh") ? .zhHans : .en
+        if first.hasPrefix("zh") { return .zhHans }
+        if first.hasPrefix("ja") { return .ja }
+        return .en
     }
 
-    /// Picks the string for the current language.
-    public static func text(_ zh: String, _ en: String) -> String {
-        resolved == .zhHans ? zh : en
+    /// Picks the string for the current language. Japanese comes from `Localization+Japanese.swift`, keyed by the
+    /// Chinese and English pair so one English word can read differently by context ("Display" the screen and
+    /// "Display" the verb); a pair without a translation yet shows the English. Call sites whose text interpolates a
+    /// value pass the Japanese template themselves, since an interpolated runtime string cannot be looked up.
+    public static func text(_ zh: String, _ en: String, _ ja: String? = nil) -> String {
+        switch resolved {
+        case .zhHans: return zh
+        case .ja: return ja ?? japanese(zh: zh, en: en) ?? en
+        case .en: return en
+        }
     }
 
-    /// The locale dates are written in: Chinese, or British English, whose day before month and 24-hour clock match the
-    /// rest of the interface.
-    public static var dateLocale: Locale { Locale(identifier: resolved == .zhHans ? "zh_CN" : "en_GB") }
+    /// The locale dates are written in: Chinese, Japanese, or British English, whose day before month and 24-hour clock
+    /// match the rest of the interface.
+    public static var dateLocale: Locale {
+        switch resolved {
+        case .zhHans: Locale(identifier: "zh_CN")
+        case .ja: Locale(identifier: "ja_JP")
+        case .en: Locale(identifier: "en_GB")
+        }
+    }
+
+    /// Money and plain numbers: Chinese, Japanese, or US English, whose grouping the design uses.
+    public static var numberLocale: Locale {
+        switch resolved {
+        case .zhHans: Locale(identifier: "zh_CN")
+        case .ja: Locale(identifier: "ja_JP")
+        case .en: Locale(identifier: "en_US")
+        }
+    }
 
     // MARK: Persisted keys → display text
 
@@ -66,12 +94,13 @@ public enum L10n {
     public static func sourceLabel(_ key: String) -> String {
         switch key {
         case sourceClaudeCode: return "Claude Code"
-        case sourceClaudeSessions: return text("Claude Code 会话", "Claude Code sessions")
-        case sourceBrowserAuth: return text("需浏览器授权", "Needs browser auth")
-        case sourceCodexAppServer: return text("本地客户端", "Local client")
-        case sourceAdditionalUsage: return text("本地客户端", "Local client")
-        case sourceDeepSeekSessions: return text("API 余额、费用与本地会话", "API balance, costs and local sessions")
-        case sourceNotConnected: return text("未连接", "Not connected")
+        case sourceClaudeSessions: return text("Claude Code 会话", "Claude Code sessions", "Claude Code セッション")
+        case sourceBrowserAuth: return text("需浏览器授权", "Needs browser auth", "ブラウザ認証が必要")
+        case sourceCodexAppServer: return text("本地客户端", "Local client", "ローカルクライアント")
+        case sourceAdditionalUsage: return text("本地客户端", "Local client", "ローカルクライアント")
+        case sourceDeepSeekSessions: return text("API 余额、费用与本地会话", "API balance, costs and local sessions",
+                                                 "API 残高・費用・ローカルセッション")
+        case sourceNotConnected: return text("未连接", "Not connected", "未接続")
         default: return key
         }
     }
@@ -104,9 +133,11 @@ public enum L10n {
 
     /// Sunday first, matching `Calendar.component(.weekday)`.
     public static var weekdayNames: [String] {
-        resolved == .zhHans
-            ? ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
-            : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+        switch resolved {
+        case .zhHans: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
+        case .ja: ["日", "月", "火", "水", "木", "金", "土"]
+        case .en: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+        }
     }
 
     /// Monday first, for the heatmap rows.

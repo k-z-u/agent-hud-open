@@ -90,7 +90,7 @@ struct SessionDetailView: View {
     /// Direct children open the same detail surface; its selection resolves against every fresh report.
     private func agents(_ children: [LiveSession]) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(L10n.text("子 agent（\(children.count)）", "Sub-agents (\(children.count))"))
+            Text(L10n.text("子 agent（\(children.count)）", "Sub-agents (\(children.count))", "サブエージェント（\(children.count)）"))
                 .font(.ui(12, .semibold))
             ForEach(children) { child in
                 Button {
@@ -144,7 +144,7 @@ struct SessionDetailView: View {
         if let credits = store.sessionCredits(session), credits.total > 0 {
             items.append((L10n.text("积分", "Credits"), credits.text,
                           credits.unattributed > 0.005
-                              ? L10n.text("未归因 \(SessionCredits.format(credits.unattributed))", "Unattributed \(SessionCredits.format(credits.unattributed))")
+                              ? L10n.text("未归因 \(SessionCredits.format(credits.unattributed))", "Unattributed \(SessionCredits.format(credits.unattributed))", "未帰属 \(SessionCredits.format(credits.unattributed))")
                               : L10n.text("已按模型归因", "Attributed to models"),
                           L10n.text("WorkBuddy 自身计量记录的会话积分消耗；无法唯一确定模型的积分单独列为未归因",
                                     "Credits WorkBuddy's own metering charged the session; the part no one model could be pinned on shows as unattributed")))
@@ -157,7 +157,7 @@ struct SessionDetailView: View {
             }
         }
         items.append((L10n.text("轮次", "Turns"), usage.flatMap { $0.turnCount > 0 ? $0.turnCount.formatted() : nil } ?? "—",
-                      usage.map { L10n.text("\($0.calls) 次调用", $0.calls == 1 ? "1 call" : "\($0.calls.formatted()) calls") } ?? "",
+                      usage.map { L10n.text("\($0.calls) 次调用", $0.calls == 1 ? "1 call" : "\($0.calls.formatted()) calls", "\($0.calls)回の呼び出し") } ?? "",
                       L10n.text("每个 prompt 开始一轮", "Each prompt starts a turn")))
         items.append((L10n.text("上下文", "Context"), context(usage), usage?.contextWindow.map { L10n.text("共 ", "Of ") + TokenFormat.short($0) }
                         ?? L10n.text("最近一次调用", "Latest call"),
@@ -291,7 +291,7 @@ struct SessionDetailView: View {
         let measure = bars.allSatisfy({ $0.cost != nil }) ? self.measure : .tokens
         return VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline) {
-                Text(L10n.text("T\(bar.id) 的每次调用", "T\(bar.id) call by call")).font(.ui(13, .semibold))
+                Text(L10n.text("T\(bar.id) 的每次调用", "T\(bar.id) call by call", "T\(bar.id) の呼び出しごと")).font(.ui(13, .semibold))
                 Spacer(minLength: 8)
                 Button { store.focusedTurn = nil } label: { Image(systemName: "xmark.circle.fill").foregroundStyle(theme.secondary) }
                     .buttonStyle(.plain)
@@ -325,14 +325,12 @@ struct SessionDetailView: View {
         let subagentCalls = calls.filter { !$0.own }, logs = Set(subagentCalls.map(\.log)).count
         let largest = calls.max { $0.tokens.kinds.new < $1.tokens.kinds.new }, added = calls.reduce(0) { $0 + $1.tokens.kinds.new }
         let prices = calls.compactMap(\.listCost)
-        return [L10n.text("\(calls.count) 次调用", calls.count == 1 ? "1 call" : "\(calls.count) calls"),
-                subagentCalls.isEmpty ? nil : L10n.text("其中子 agent \(subagentCalls.count) 次（\(logs) 个）",
-                                                        "\(subagentCalls.count) by \(logs == 1 ? "a sub-agent" : "\(logs) sub-agents")"),
+        return [L10n.text("\(calls.count) 次调用", calls.count == 1 ? "1 call" : "\(calls.count) calls", "\(calls.count)回の呼び出し"),
+                subagentCalls.isEmpty ? nil : L10n.text("其中子 agent \(subagentCalls.count) 次（\(logs) 个）", "\(subagentCalls.count) by \(logs == 1 ? "a sub-agent" : "\(logs) sub-agents")", "\(subagentCalls.count)回は\(logs)件のサブエージェント"),
                 calls.count > 1 ? Countdown.format(max(0, calls.last!.timestamp.timeIntervalSince(calls[0].timestamp))) : nil,
                 prices.count == calls.count ? "≈" + MoneyFormat.amount(prices.reduce(0, +), currency: "USD") : nil,
                 largest.flatMap { call in added > 0 && calls.count > 1
-                    ? L10n.text("新增最多的一次 \(TokenFormat.short(call.tokens.kinds.new))，占 \(Int((Double(call.tokens.kinds.new) / Double(added) * 100).rounded()))%",
-                                "Largest call added \(TokenFormat.short(call.tokens.kinds.new)), \(Int((Double(call.tokens.kinds.new) / Double(added) * 100).rounded()))%")
+                    ? L10n.text("新增最多的一次 \(TokenFormat.short(call.tokens.kinds.new))，占 \(Int((Double(call.tokens.kinds.new) / Double(added) * 100).rounded()))%", "Largest call added \(TokenFormat.short(call.tokens.kinds.new)), \(Int((Double(call.tokens.kinds.new) / Double(added) * 100).rounded()))%", "追加量が最大の呼び出し：\(TokenFormat.short(call.tokens.kinds.new))、\(Int((Double(call.tokens.kinds.new) / Double(added) * 100).rounded()))%")
                     : nil }].compactMap { $0 }.joined(separator: " · ")
     }
 
@@ -402,13 +400,11 @@ struct SessionDetailView: View {
                 .help(TokenKind.allCases.map { "\($0.label) \(model.tokens.kinds[$0].formatted())" }.joined(separator: " · "))
             }
             if let credits, credits.unattributed > 0.005 {
-                Text(L10n.text("另有 \(SessionCredits.format(credits.unattributed)) 积分无法唯一归因到某个模型，未列入上表",
-                               "Another \(SessionCredits.format(credits.unattributed)) credits could not be pinned on one model and are not listed"))
+                Text(L10n.text("另有 \(SessionCredits.format(credits.unattributed)) 积分无法唯一归因到某个模型，未列入上表", "Another \(SessionCredits.format(credits.unattributed)) credits could not be pinned on one model and are not listed", "別の \(SessionCredits.format(credits.unattributed)) クレジットは単一のモデルに割り当てられず、一覧に表示されていません"))
                     .font(.ui(10)).foregroundStyle(theme.secondary)
             }
             if let subagents = usage.subagents {
-                Text(L10n.text("其中子 agent \(TokenFormat.short(subagents.kinds.total))，会话列表的合计同样包含这部分",
-                               "Sub-agents spent \(TokenFormat.short(subagents.kinds.total)) of this, which the session list counts too"))
+                Text(L10n.text("其中子 agent \(TokenFormat.short(subagents.kinds.total))，会话列表的合计同样包含这部分", "Sub-agents spent \(TokenFormat.short(subagents.kinds.total)) of this, which the session list counts too", "このうちサブエージェントが \(TokenFormat.short(subagents.kinds.total)) を消費しました。セッション一覧の合計にも含まれます"))
                     .font(.ui(10)).foregroundStyle(theme.secondary)
             }
         }

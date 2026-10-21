@@ -5,6 +5,16 @@ import XCTest
 @testable import AgentHUDCore
 
 final class AdditionalProviderTests: XCTestCase, @unchecked Sendable {
+    override func setUp() {
+        super.setUp()
+        L10n.setLanguage(.en)
+    }
+
+    override func tearDown() {
+        L10n.setLanguage(.system)
+        super.tearDown()
+    }
+
     private let now = Date(timeIntervalSince1970: 1788800000)
     private func json(_ text: String) throws -> ProviderJSON { try .read(Data(text.utf8)) }
     private func directory() throws -> URL {

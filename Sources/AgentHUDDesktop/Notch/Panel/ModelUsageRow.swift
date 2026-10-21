@@ -110,7 +110,7 @@ struct ModelUsageRow: View {
 
     private var displayedForecastHint: String? {
         guard metric == .burnRate, let exhaustionTimeLabel else { return forecastHint }
-        return L10n.text("预计耗尽：\(exhaustionTimeLabel)", "Exhausts \(exhaustionTimeLabel)")
+        return L10n.text("预计耗尽：\(exhaustionTimeLabel)", "Exhausts \(exhaustionTimeLabel)", "枯渇予定：\(exhaustionTimeLabel)")
     }
 
     private var projectedAtReset: Double? { metrics.projectedAtReset }
@@ -185,7 +185,7 @@ struct QuotaRowMetrics {
             guard let cost, let first = cost.currencies.first else { return nil }
             // A currency's compact notation needs macOS 15, so the narrow symbol, as `MoneyFormat.short` writes it,
             // goes before the number's compact notation.
-            let locale = Locale(identifier: L10n.resolved == .zhHans ? "zh_CN" : "en_US")
+            let locale = L10n.numberLocale
             let symbol: String = Decimal(0).formatted(Decimal.FormatStyle.Currency(code: first).presentation(.narrow)
                 .precision(.fractionLength(0)).locale(locale)).replacingOccurrences(of: "0", with: "")
             let amount: Double = NSDecimalNumber(decimal: cost.amounts[first] ?? 0).doubleValue
@@ -207,7 +207,7 @@ struct QuotaRowMetrics {
             if let sampling = QuotaForecast.sampling(outlook: outlook, insights: insights) { return sampling.label }
             return QuotaForecast.text(of: outlook, projectedUsedAtReset: projectedAtReset) ?? "—"
         case .tokens:
-            return replyRate.map { L10n.text("\($0.calls) 次回复", "\($0.calls) replies") } ?? "—"
+            return replyRate.map { L10n.text("\($0.calls) 次回复", "\($0.calls) replies", "\($0.calls)件の返信") } ?? "—"
         case .consumed:
             // With a reported capacity the line reads "used / cap"; without one it carries the pace instead.
             if let capacity = consumed?.capacity { return "/ " + TokenFormat.short(Int(capacity)) }

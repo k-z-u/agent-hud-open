@@ -277,7 +277,7 @@ struct ClientQuestionCard: View {
                 }
             }
             HStack(spacing: 8) {
-                Text(L10n.text("请到 \(request.vendor) 里回答", "Answer in \(request.vendor)"))
+                Text(L10n.text("请到 \(request.vendor) 里回答", "Answer in \(request.vendor)", "\(request.vendor) で回答してください"))
                     .font(.ui(11)).foregroundStyle(color.secondary).lineLimit(1)
                 Spacer(minLength: 8)
                 QuestionButton(title: L10n.text("知道了", "Dismiss"), symbol: nil, identifier: "island-permission-dismiss",

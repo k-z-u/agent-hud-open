@@ -108,7 +108,7 @@ struct TokenConsumptionChart: View {
                         store.statsTab = .tokens
                         onOpenStats()
                     } label: {
-                        Text(L10n.text("另 \(legend.more) 个 · 查看统计", "+\(legend.more) more · View stats"))
+                        Text(L10n.text("另 \(legend.more) 个 · 查看统计", "+\(legend.more) more · View stats", "ほか\(legend.more)件 · 統計を表示"))
                     }
                     .buttonStyle(.plain).font(.ui(10)).foregroundStyle(theme.secondary)
                     .accessibilityIdentifier("island-more-token-models")
@@ -174,7 +174,7 @@ struct TokenConsumptionChart: View {
                     HStack(spacing: 5) {
                         Image(systemName: modelsExpanded ? "chevron.down" : "chevron.right").font(.ui(9, .semibold))
                         Text(modelFilter.isAll ? L10n.text("模型 · 全部", "Models · All")
-                             : L10n.text("模型 · 已选 \(modelFilter.consumerIDs?.count ?? 0) 个", "Models · \(modelFilter.consumerIDs?.count ?? 0) selected"))
+                             : L10n.text("模型 · 已选 \(modelFilter.consumerIDs?.count ?? 0) 个", "Models · \(modelFilter.consumerIDs?.count ?? 0) selected", "モデル · \(modelFilter.consumerIDs?.count ?? 0) 件選択中"))
                     }
                     .contentShape(Rectangle())
                 }

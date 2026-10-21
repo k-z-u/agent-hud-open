@@ -38,7 +38,7 @@ struct AccountWalletRow: View {
         .help(wallet.observedAt.map { at in
             let date = at.formatted(Date.FormatStyle().month(.abbreviated).day()
                 .hour().minute().second().locale(L10n.dateLocale))
-            return L10n.text("读取时间：\(date)", "Read at: \(date)")
+            return L10n.text("读取时间：\(date)", "Read at: \(date)", "読み取り日時：\(date)")
         } ?? "")
         .accessibilityElement(children: .combine)
     }
@@ -78,8 +78,7 @@ struct AccountWalletLabels {
         switch wallet.kind {
         case .prepaid: amount(wallet.balance)
         case .onDemand:
-            L10n.text("已用 \(amount(wallet.used)) · 上限 \(amount(wallet.limit))",
-                      "Used \(amount(wallet.used)) · Limit \(amount(wallet.limit))")
+            L10n.text("已用 \(amount(wallet.used)) · 上限 \(amount(wallet.limit))", "Used \(amount(wallet.used)) · Limit \(amount(wallet.limit))", "使用額 \(amount(wallet.used)) · 上限 \(amount(wallet.limit))")
         }
     }
 

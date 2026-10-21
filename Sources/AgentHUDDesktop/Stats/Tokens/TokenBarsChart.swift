@@ -175,7 +175,7 @@ struct TokenBarsChart: View {
     }
 
     private func description(_ column: TokenColumn) -> String {
-        let total = L10n.text("合计 \(column.total.formatted()) tokens", "Total \(column.total.formatted()) tokens")
+        let total = L10n.text("合计 \(column.total.formatted()) tokens", "Total \(column.total.formatted()) tokens", "合計 \(column.total.formatted()) トークン")
         let details = zip(consumers, column.tokens).filter { $0.1 > 0 }.map { "\($0.0.displayName): \($0.1.formatted())" }
         return ([period(column), total] + details).joined(separator: "\n")
     }

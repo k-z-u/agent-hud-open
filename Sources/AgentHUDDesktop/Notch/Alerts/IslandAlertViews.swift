@@ -232,8 +232,7 @@ private struct CompletionClosedRow: View {
         .buttonStyle(.plain)
         .onHover { hovering = $0 }
         .accessibilityIdentifier("island-event-reply-\(event.id)")
-        .accessibilityLabel(L10n.text("打开 \(event.agentVendor) 的回复：\(event.task)",
-                                      "Open \(event.agentVendor) reply: \(event.task)"))
+        .accessibilityLabel(L10n.text("打开 \(event.agentVendor) 的回复：\(event.task)", "Open \(event.agentVendor) reply: \(event.task)", "\(event.agentVendor) の返信を開く：\(event.task)"))
         .help(L10n.text("展开回复与会话操作", "Show reply and session actions"))
     }
 }
@@ -259,7 +258,7 @@ struct IslandAlertInlineView: View {
                 HStack(spacing: 10) {
                     TurnEndedSymbol()
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(L10n.text("\(event.agentVendor) · 有新回复", "\(event.agentVendor) · New reply"))
+                        Text(L10n.text("\(event.agentVendor) · 有新回复", "\(event.agentVendor) · New reply", "\(event.agentVendor) · 新しい返信"))
                             .font(.ui(12, .medium)).foregroundStyle(alert.accentText(theme))
                         Text(event.task).font(.ui(11)).foregroundStyle(theme.alertInk(0.7)).lineLimit(1)
                         if let message = event.message {
